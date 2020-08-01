@@ -1,0 +1,19 @@
+﻿@using BitRate.Data.Models
+@using System.Globalization
+@model Rate
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Rate</title>
+</head>
+<body>
+    <h1>@Model.Current.ToString("C", CultureInfo.GetCultureInfo("us-US"))</h1>
+</body>
+</html>
