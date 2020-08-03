@@ -8,9 +8,11 @@ namespace BitRate.Data.Interfaces.Mocks
 {
     public class MockBitcoin : IBitcoin
     {
+
         public Rate getBitcoinRate()
         {
-            return new Rate() { Current = 10000 };
+            Rate rate =  Services.Bitmex.GetCurrentRate();
+            return rate; 
         }
     }
 }

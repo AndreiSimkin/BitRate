@@ -7,6 +7,7 @@ using BitRate.Data.Interfaces.Mocks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -20,19 +21,12 @@ namespace BitRate
         {
             services.AddTransient<IBitcoin, MockBitcoin>();
             services.AddMvc(option => option.EnableEndpointRouting = false);
+            Services.Bitmex.Start();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "",
-                    defaults: new { controller = "Bitcoin", action = "Rate" }
-                    );
-            });
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();

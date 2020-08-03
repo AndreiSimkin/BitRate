@@ -4,22 +4,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BitRate.Data.Models;
 
 namespace BitRate.Controllers
 {
-    public class BitcoinController : Controller
+    public class HomeController : Controller
     {
         private readonly IBitcoin _bitcoinRate;
 
-        public BitcoinController(IBitcoin iBitconRate)
+        public HomeController(IBitcoin iBitconRate)
         {
             _bitcoinRate = iBitconRate;
         }
 
-        public ViewResult Rate()
+        public ViewResult Index(Rate rate)
         {
-            var rate = _bitcoinRate.getBitcoinRate();
             return View(rate);
+        }
+
+        public IActionResult Update()
+        {
+            return RedirectToAction("Index", Services.Bitmex.GetCurrentRate());
         }
     }
 }
