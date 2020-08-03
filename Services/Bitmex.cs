@@ -57,7 +57,7 @@ namespace BitRate.Services
             CurrentRate = null;
         }
 
-        public static Rate GetCurrentRate()
+        public static Rate GetRate()
         {
             while (IsRuning && CurrentRate == null)
                 Thread.Sleep(10);

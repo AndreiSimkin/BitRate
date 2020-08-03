@@ -24,7 +24,7 @@ namespace BitRate.Controllers
 
         public IActionResult Update()
         {
-            return RedirectToAction("Index", Services.Bitmex.GetCurrentRate());
+            return RedirectToAction("Index", Services.Bitmex.GetRate());
         }
     }
 }

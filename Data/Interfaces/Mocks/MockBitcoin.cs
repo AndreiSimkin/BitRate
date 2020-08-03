@@ -11,7 +11,7 @@ namespace BitRate.Data.Interfaces.Mocks
 
         public Rate getBitcoinRate()
         {
-            Rate rate =  Services.Bitmex.GetCurrentRate();
+            Rate rate =  Services.Bitmex.GetRate();
             return rate; 
         }
     }
