@@ -18,6 +18,8 @@ namespace BitRate.Services
         static Rate CurrentRate { get; set; }
         public static bool IsRuning { get; private set; }
         static WebSocket Socket { get; set; }
+        public delegate void RateRecivedEventHandler(Rate rate);
+        public static event RateRecivedEventHandler RateRecived;
 
         class BitmexResponce
         {
@@ -34,6 +36,15 @@ namespace BitRate.Services
             Socket = new WebSocket("wss://www.bitmex.com/realtime?subscribe=quote:XBTUSD");
             Socket.Open();
             Socket.Opened += Socket_Opened;
+            Socket.Error += Socket_Error;
+
+        }
+
+        private static void Socket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            Socket.Error -= Socket_Error;
+            Socket.Opened -= Socket_Opened;
+            Socket.Closed -= Socket_Closed;
         }
 
         private static void Socket_Opened(object sender, EventArgs e)
@@ -41,18 +52,26 @@ namespace BitRate.Services
             IsRuning = true;
             Socket.MessageReceived += Socket_MessageReceived;
             Socket.Opened -= Socket_Opened;
+            Socket.Closed += Socket_Closed;
+        }
+
+        private static void Socket_Closed(object sender, EventArgs e)
+        {
+            Socket.Error -= Socket_Error;
+            Socket.Opened -= Socket_Opened;
+            Socket.Closed -= Socket_Closed;
         }
 
         private static void Socket_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             if (e.Message.Contains("table"))
                 CurrentRate = new Rate() { Current = JsonConvert.DeserializeObject<BitmexResponce>(e.Message).data.Last().bidPrice };
+            RateRecived?.Invoke(CurrentRate);
         }
 
         public static void Stop()
         {
             IsRuning = false;
-            Socket.MessageReceived -= Socket_MessageReceived;
             Socket.Close();
             CurrentRate = null;
         }
